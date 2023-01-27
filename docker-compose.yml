@@ -1,0 +1,47 @@
+version: '3'
+
+networks:
+    net:
+        driver: bridge
+
+services:
+    nginx:
+        image: nginx
+        ports:
+            - "80:80"
+            - "443:443"
+        depends_on:
+            - php-fpm
+        networks:
+            - net
+        volumes:
+            - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+            - .:/var/www/html
+    php-fpm:
+        build:
+            context: ./docker/php-fpm
+            args:
+              - UID=1000
+              - GID=1000
+        networks:
+            - net
+        volumes:
+            - .:/var/www/html
+        depends_on:
+            - mysql
+    mysql:
+        image: 'mysql/mysql-server:8.0'
+        ports:
+            - '3306:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_DATABASE: '${DB_DATABASE}'
+            MYSQL_USER: '${DB_USERNAME}'
+            MYSQL_PASSWORD: '${DB_PASSWORD}'
+        volumes:
+            - './.docker/storage:/var/lib/mysql'
+        networks:
+            - net
+volumes:
+    app-mysql:
+        driver: local
