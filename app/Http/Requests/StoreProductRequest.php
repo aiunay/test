@@ -29,7 +29,7 @@ class StoreProductRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'manufacturer' => 'required|max:255',
-            'material_id' => 'required|integer',
+            'material_id' => 'required|integer|exists:App\Models\Material,id',
             'is_visible' => 'boolean',
             'price' => 'required|decimal:0,3',
             'currency' => 'required'
