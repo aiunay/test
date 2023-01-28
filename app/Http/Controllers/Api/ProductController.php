@@ -7,6 +7,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -46,4 +47,22 @@ class ProductController extends Controller
             ->json(['message' => 'Product deleted successfully'])
             ->setStatusCode(Response::HTTP_OK);
     }
+
+    /**
+     * Get manufacturers with number of products
+     *
+     * @return mixed
+     */
+    public function manufacturers()
+    {
+        $manufacturers = DB::table('products')
+            ->groupBy('manufacturer')
+            ->selectRaw('manufacturer, count(id) as number_of_products')
+            ->get();
+
+        return response()
+            ->json(['data' => $manufacturers])
+            ->setStatusCode(Response::HTTP_OK);
+    }
+
 }

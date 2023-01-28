@@ -21,6 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['as' => 'api.'], function () {
 
+    Route::get('products/manufacturers', [ProductController::class, 'manufacturers'])->name('manufacturers');
+
     Route::apiResource('products', ProductController::class)
         ->only(['store', 'show', 'destroy']);
 

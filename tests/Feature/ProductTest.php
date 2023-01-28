@@ -115,4 +115,21 @@ class ProductTest extends TestCase
                 'message' => 'Product deleted successfully'
             ]);
     }
+
+    public function test_get_manufacturers_with_number_of_products()
+    {
+
+        $this->get('/api/products/manufacturers')
+            ->assertStatus(200)
+            ->assertJsonStructure(
+                [
+                    'data' => [
+                        '*' => [
+                            "manufacturer",
+                            "number_of_products",
+                        ]
+                    ],
+                ]
+            );
+    }
 }
